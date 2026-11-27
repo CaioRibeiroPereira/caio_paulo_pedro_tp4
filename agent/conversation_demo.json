@@ -1,0 +1,14 @@
+[
+  {
+    "user": "Fui cobrado duas vezes na minha fatura deste mês.",
+    "assistant": "Compreendo que você identificou uma cobrança duplicada em sua fatura deste mês.\n\nNotei que sua solicitação pode estar relacionada a um problema de faturamento, embora a classificação do sistema tenha sido incerta (probabilidade baixa). Para que eu possa te ajudar da melhor forma, você poderia confirmar se deseja abrir uma contestação sobre este valor cobrado indevidamente?"
+  },
+  {
+    "user": "Também quero saber se consigo cancelar a renovação automática.",
+    "assistant": "Compreendo que, além da questão da cobrança, você deseja cancelar a renovação automática da sua assinatura. \n\nEsta classificação também apresenta incerteza. Para prosseguirmos, você poderia confirmar se deseja desativar a renovação agora ou se prefere que eu tente primeiro resolver a questão da cobrança duplicada que mencionou anteriormente?"
+  },
+  {
+    "user": "Antes disso, meu aplicativo não abre desde a atualização. O que faço?",
+    "assistant": "Compreendo que você está enfrentando dificuldades técnicas com o aplicativo após a última atualização.\n\nEsta classificação também apresenta incerteza. Para que eu possa te orientar corretamente, você poderia me informar qual é o modelo do seu aparelho e se aparece alguma mensagem de erro específica ao tentar abrir o aplicativo? \n\nAssim que resolvermos essa questão técnica, daremos sequência aos pontos sobre a cobrança e a renovação da assinatura."
+  }
+]

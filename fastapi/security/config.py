@@ -8,7 +8,7 @@ class SecuritySettings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
-    
-    model_config = SettingsConfigDict(env_file = env_file)
+
+    model_config = SettingsConfigDict(env_file=env_file, extra="ignore")
 
 security_settings = SecuritySettings()
