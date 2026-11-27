@@ -33,8 +33,8 @@ def mock_predict(text: str) -> tuple[str, float]:
     confidence = round(0.7 + (digest[1] / 255) * 0.29, 2)
     return intent, confidence
 
-# Modelo treinado no TP4 (eda/eda_tp4.ipynb): TF-IDF + Regressão Logística,
-# carregado uma vez na subida da API.
+# Melhor modelo selecionado no TP4 por GridSearchCV (eda/eda_tp4.ipynb):
+# TF-IDF com unigramas+bigrams + Regressão Logística (C=10), carregado uma vez.
 INTENT_MODEL_PATH = Path(__file__).resolve().parent.parent / "ml" / "intent_classifier.joblib"
 intent_classifier = joblib.load(INTENT_MODEL_PATH)
 
