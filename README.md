@@ -100,3 +100,23 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 - Docs: `http://<IP>:8000/docs`
 - Usuários de teste (criados pelo seed): `alice`/`alice123`, `bruno`/`bruno123`
 - Testes: `cd fastapi && pytest tests/ -v`
+
+# TP4 — Otimização do classificador
+
+O classificador de intenções foi otimizado com `GridSearchCV` no notebook
+`eda/eda_tp4.ipynb`. A busca avalia 9 combinações de hiperparâmetros com
+validação cruzada estratificada de 5 folds, usando F1-score macro como métrica
+de seleção:
+
+- `clf__C`: `0.1`, `1.0` e `10.0`;
+- `tfidf__ngram_range`: `(1, 1)`, `(1, 2)` e `(1, 3)`.
+
+Os melhores parâmetros encontrados foram `clf__C=10.0` e
+`tfidf__ngram_range=(1, 2)`. No conjunto de teste, o F1-score macro passou de
+`0.203564` para `0.208483` (ganho relativo de `2.42%`) e o ROC-AUC macro passou
+de `0.498738` para `0.501809`. O ganho é pequeno e o desempenho continua
+próximo do acaso, uma limitação documentada do dataset.
+
+O melhor pipeline completo (TF-IDF + Regressão Logística) está serializado em
+`fastapi/ml/intent_classifier.joblib` e é consumido pelo endpoint autenticado
+`POST /classify`.
