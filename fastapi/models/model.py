@@ -74,6 +74,25 @@ class PredictResponse(BaseModel):
     confidence: float = PField(description="Confiança da previsão (0 a 1).", examples=[0.91])
 
 
+class ClassifyRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    text: str = PField(
+        min_length=1,
+        max_length=2000,
+        description="Texto do atendimento ao cliente a ser classificado pelo modelo treinado.",
+        examples=["Quero cancelar minha assinatura e receber o reembolso."],
+    )
+
+
+class ClassifyResponse(BaseModel):
+    intent: str = PField(description="Intenção prevista pelo modelo treinado.", examples=["Refund request"])
+    probability: float = PField(
+        description="Probabilidade estimada pelo modelo para a intenção prevista (0 a 1).",
+        examples=[0.23],
+    )
+
+
 class PredictionRead(BaseModel):
     id: int
     text: str

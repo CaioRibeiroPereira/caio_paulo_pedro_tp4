@@ -1,9 +1,21 @@
 import hashlib
+from pathlib import Path
+
+import joblib
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import select
 
 from database import SessionDep
-from models import Prediction, PredictionRead, PredictRequest, PredictResponse, User, UserRead
+from models import (
+    ClassifyRequest,
+    ClassifyResponse,
+    Prediction,
+    PredictionRead,
+    PredictRequest,
+    PredictResponse,
+    User,
+    UserRead,
+)
 from rate_limit import limiter
 from security import get_admin_user, get_current_user
 
@@ -20,6 +32,11 @@ def mock_predict(text: str) -> tuple[str, float]:
     intent = MOCK_INTENTS[digest[0] % len(MOCK_INTENTS)]
     confidence = round(0.7 + (digest[1] / 255) * 0.29, 2)
     return intent, confidence
+
+# Modelo treinado no TP4 (eda/eda_tp4.ipynb): TF-IDF + Regressão Logística,
+# carregado uma vez na subida da API.
+INTENT_MODEL_PATH = Path(__file__).resolve().parent.parent / "ml" / "intent_classifier.joblib"
+intent_classifier = joblib.load(INTENT_MODEL_PATH)
 
 
 @api_router.get(
@@ -82,6 +99,31 @@ def predict(
     session.commit()
 
     return PredictResponse(intent=fake_intent, confidence=fake_confidence)
+
+
+@api_router.post(
+    "/classify",
+    response_model=ClassifyResponse,
+    tags=["predições"],
+    summary="Classifica a intenção de um texto com o modelo treinado",
+    description=(
+        "Recebe um texto (1 a 2000 caracteres) e devolve a intenção prevista pelo classificador "
+        "treinado no TP4 (TF-IDF + Regressão Logística), com a probabilidade estimada pelo modelo "
+        "para essa intenção."
+    ),
+    responses={**UNAUTHORIZED, 422: {"description": "Corpo inválido."}},
+)
+def classify(
+    payload: ClassifyRequest,
+    current_user: User = Depends(get_current_user),
+):
+    probabilidades = intent_classifier.predict_proba([payload.text])[0]
+    indice_previsto = probabilidades.argmax()
+
+    return ClassifyResponse(
+        intent=intent_classifier.classes_[indice_previsto],
+        probability=round(float(probabilidades[indice_previsto]), 4),
+    )
 
 
 @api_router.get(
